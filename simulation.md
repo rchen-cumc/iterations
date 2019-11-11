@@ -1,35 +1,13 @@
----
-title: "Simulations!"
-author: "RuiJun Chen"
-date: "10/31/2019"
-output: github_document
----
-
-```{r setup, include = FALSE}
-library(tidyverse)
-library(rvest)
-knitr::opts_chunk$set(
-	echo = TRUE,
-	warning = FALSE,
-	fig.width = 8, 
-  fig.height = 6,
-  out.width = "90%"
-)
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-set.seed(1)
-```
+Simulations\!
+================
+RuiJun Chen
+10/31/2019
 
 ## Time to simulate
 
 Re-use the function from a couple of lectures ago
 
-```{r}
+``` r
 sim_regression = function(n, beta0 = 2, beta1 = 3) {
   
   sim_data = tibble(
@@ -46,13 +24,18 @@ sim_regression = function(n, beta0 = 2, beta1 = 3) {
 }
 ```
 
-```{r}
+``` r
 sim_regression(n = 30)
 ```
 
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      2.09      3.04
+
 ## rerun using a for loop
 
-```{r}
+``` r
 output = vector("list", length = 5000)
 
 for (i in 1:5000) {
@@ -63,24 +46,27 @@ bind_rows(output) %>%
   ggplot(aes(x = beta0_hat)) + geom_density()
 ```
 
+<img src="simulation_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
+
 ## rerun simulation using `purrr`
 
-
-```{r}
+``` r
 output = 
   rerun(5000, sim_regression(n = 30)) %>% 
   bind_rows
 ```
 
-```{r}
+``` r
 output %>% 
   ggplot(aes(x = beta0_hat, y = beta1_hat)) + 
   geom_point()
 ```
 
+<img src="simulation_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" />
+
 what in the what is going on here
 
-```{r}
+``` r
 sim_data = tibble(
     x = rnorm(30, mean = 1, sd = 1),
     y = 2 + 3 * x + rnorm(30, 0, 1)
@@ -90,8 +76,9 @@ sim_data %>%
   stat_smooth(method = "lm", se = FALSE)
 ```
 
+<img src="simulation_files/figure-gfm/unnamed-chunk-6-1.png" width="90%" />
 
-```{r}
+``` r
 output %>% 
   pivot_longer(
     beta0_hat:beta1_hat,
@@ -103,9 +90,14 @@ output %>%
   knitr::kable(digits = 3)
 ```
 
-## try another sample size 
+| parameter  | emp\_mean | emp\_var |
+| :--------- | --------: | -------: |
+| beta0\_hat |     2.005 |    0.072 |
+| beta1\_hat |     2.995 |    0.037 |
 
-```{r}
+## try another sample size
+
+``` r
 n_list = list(
   "n_30"  = 30,
   "n_60"  = 60,
@@ -121,8 +113,7 @@ for (i in 1:4) {
 }
 ```
 
-
-```{r}
+``` r
 sim_results = 
   tibble(
     sample_size = c(30, 60, 120, 240)
@@ -133,16 +124,23 @@ sim_results =
   ) %>% 
   select(-output_list) %>% 
   unnest(output_df)
-  
 ```
 
-```{r}
+``` r
 sim_results %>% 
   group_by(sample_size) %>% 
   summarize(var_b1 = var(beta1_hat))
 ```
 
-```{r}
+    ## # A tibble: 4 x 2
+    ##   sample_size  var_b1
+    ##         <dbl>   <dbl>
+    ## 1          30 0.0380 
+    ## 2          60 0.0184 
+    ## 3         120 0.00864
+    ## 4         240 0.00464
+
+``` r
 sim_results %>% 
   mutate(
     sample_size = str_c("n = ", sample_size),
@@ -152,3 +150,5 @@ sim_results %>%
   geom_point() +
   facet_grid(~sample_size)
 ```
+
+<img src="simulation_files/figure-gfm/unnamed-chunk-11-1.png" width="90%" />
