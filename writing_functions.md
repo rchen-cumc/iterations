@@ -17,23 +17,23 @@ y = rnorm(n = 30, mean = 24, sd = 2.3)
 (x - mean(x)) / sd(x)
 ```
 
-    ##  [1]  0.54979606 -0.25290358 -2.21617425 -1.56160995 -1.30072135
-    ##  [6]  0.62410869  1.00436671 -1.18531118  1.00288877 -0.29009366
-    ## [11]  0.66140601 -1.69282642 -0.21098354 -0.12314805 -0.24843210
-    ## [16] -0.71132705 -0.72311377  0.38927699 -0.68221204  0.78629650
-    ## [21]  0.01275268  1.23771514  0.80479865 -0.69727088  1.43624343
-    ## [26] -0.19144189  1.01761260  0.20905695  2.01264209  0.33860844
+    ##  [1] -0.69872782  1.13056185  2.00641685 -2.58618806  0.17807815
+    ##  [6]  1.59414336  0.35500578  0.06868434 -0.86143521 -1.26077563
+    ## [11] -0.93257121 -0.79138436  0.84537304 -0.16376542 -0.84138984
+    ## [16] -0.12550373  0.38303885  0.68254976  1.20634212 -0.82600705
+    ## [21] -0.35596746 -0.93232656 -0.69640797  1.25827297 -1.06311815
+    ## [26]  0.24341516  1.03959391  0.37471724  0.41695643  0.35241868
 
 ``` r
 (x_again - mean(x_again)) / sd(x_again)
 ```
 
-    ##  [1]  1.010699144  0.167020917  0.729547047 -0.132168045 -0.586585317
-    ##  [6] -0.241727040 -1.368743846 -0.730162032 -0.124064335  0.543977222
-    ## [11] -0.660828457  0.726077159  0.894575030  0.261740397 -1.179936306
-    ## [16] -0.045765637 -0.122182318 -0.009455554 -1.046563952 -2.591878125
-    ## [21]  0.546641954  0.060005239 -1.221657194 -0.236744891  2.666556328
-    ## [26]  0.544083669  1.961527589  0.180762510  0.211889112 -0.206640267
+    ##  [1] -0.485002058  1.154418558  0.445873221 -1.018651397  1.610718022
+    ##  [6] -0.442007229  0.062709825  0.825159568 -0.422152921 -0.170778529
+    ## [11]  0.356601110  0.507909868  2.998955798  0.086381992 -1.764737153
+    ## [16] -1.048199119  0.293610603 -0.589534131 -0.345195516 -1.007540344
+    ## [21]  0.560020562 -0.788269282 -0.792143623 -0.463653592  0.796308832
+    ## [26]  0.008675025  0.072228102 -1.639899514 -0.273338189  1.471531512
 
 Now a function
 
@@ -55,12 +55,12 @@ Try out the function
 z_score(x_arg = y)
 ```
 
-    ##  [1]  1.74082495  1.04788400 -0.85779913  1.42139617 -0.26000379
-    ##  [6]  0.03663253  0.96094739  0.08272616  0.72927201  1.46411398
-    ## [11]  0.46206614  0.42887461 -1.03282728  0.82041806 -2.00352924
-    ## [16] -0.34213927  0.84544758  0.27922677 -0.74091163  0.14762095
-    ## [21] -0.37656318  0.68142471 -0.90500597 -1.29252732  0.55177226
-    ## [26] -2.41806829 -0.99142465  0.14212004 -0.73807766  0.11610912
+    ##  [1] -1.78386043  0.42277388  0.84705640  0.73734477  1.12464154
+    ##  [6] -0.49216488 -1.08995113  0.53028425 -0.64476744  1.12754440
+    ## [11]  0.33461807 -1.11924594  2.08111631 -2.05817697 -0.89689087
+    ## [16]  0.81723342 -0.85569206 -0.37515484  1.04580909 -0.48953173
+    ## [21]  0.18996971 -0.07067521  1.20731982 -1.20780364  0.33294564
+    ## [26] -0.71891995  1.29195940 -0.03299771 -0.76625535  0.51147145
 
 ``` r
 z_score(x_arg = 3) 
@@ -113,18 +113,18 @@ mean_and_sd(input_x = y)
 ```
 
     ## $mean_input
-    ## [1] 24.36825
+    ## [1] 23.75181
     ## 
     ## $sd_input
-    ## [1] 2.024774
+    ## [1] 2.200549
     ## 
     ## $z_score
-    ##  [1]  1.74082495  1.04788400 -0.85779913  1.42139617 -0.26000379
-    ##  [6]  0.03663253  0.96094739  0.08272616  0.72927201  1.46411398
-    ## [11]  0.46206614  0.42887461 -1.03282728  0.82041806 -2.00352924
-    ## [16] -0.34213927  0.84544758  0.27922677 -0.74091163  0.14762095
-    ## [21] -0.37656318  0.68142471 -0.90500597 -1.29252732  0.55177226
-    ## [26] -2.41806829 -0.99142465  0.14212004 -0.73807766  0.11610912
+    ##  [1] -1.78386043  0.42277388  0.84705640  0.73734477  1.12464154
+    ##  [6] -0.49216488 -1.08995113  0.53028425 -0.64476744  1.12754440
+    ## [11]  0.33461807 -1.11924594  2.08111631 -2.05817697 -0.89689087
+    ## [16]  0.81723342 -0.85569206 -0.37515484  1.04580909 -0.48953173
+    ## [21]  0.18996971 -0.07067521  1.20731982 -1.20780364  0.33294564
+    ## [26] -0.71891995  1.29195940 -0.03299771 -0.76625535  0.51147145
 
 ## Multiple inputs
 
@@ -149,7 +149,7 @@ beta1_hat = coef(ls_fit)[2] # slope
 ```
 
 ``` r
-sim_regression = function(n, beta0 = 2, beta1 = 3) {
+sim_regression = function(n, beta0 = 2, beta1 = 3) { #can set default values for args
   
   sim_data = tibble(
     x = rnorm(n, mean = 1, sd = 1),
@@ -170,7 +170,16 @@ sim_regression(n = 3000)
     ## # A tibble: 1 x 2
     ##   beta0_hat beta1_hat
     ##       <dbl>     <dbl>
-    ## 1      1.99      3.00
+    ## 1      2.01      2.99
+
+``` r
+sim_regression(3000, 2, 3) #don't need to specify args, can use positional matching
+```
+
+    ## # A tibble: 1 x 2
+    ##   beta0_hat beta1_hat
+    ##       <dbl>     <dbl>
+    ## 1      1.97      3.02
 
 ``` r
 sim_regression(n = 3000, beta0 = 17, beta1 = -3) #specifying beta0 intercept and beta1 slope
@@ -179,7 +188,7 @@ sim_regression(n = 3000, beta0 = 17, beta1 = -3) #specifying beta0 intercept and
     ## # A tibble: 1 x 2
     ##   beta0_hat beta1_hat
     ##       <dbl>     <dbl>
-    ## 1      17.0     -3.01
+    ## 1      17.0     -3.00
 
 ``` r
 sim_regression(n = 14, beta0 = 24)
@@ -188,4 +197,154 @@ sim_regression(n = 14, beta0 = 24)
     ## # A tibble: 1 x 2
     ##   beta0_hat beta1_hat
     ##       <dbl>     <dbl>
-    ## 1      24.0      2.97
+    ## 1      24.3      2.86
+
+## Scrape lots of napoleon
+
+``` r
+url = "https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=1"
+
+dynamite_html = read_html(url)
+
+review_titles = 
+  dynamite_html %>%
+  html_nodes("#cm_cr-review_list .review-title") %>%
+  html_text()
+
+review_stars = 
+  dynamite_html %>%
+  html_nodes("#cm_cr-review_list .review-rating") %>%
+  html_text()
+
+review_text = 
+  dynamite_html %>%
+  html_nodes(".review-text-content span") %>%
+  html_text()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+```
+
+Now as a function
+
+``` r
+read_page_reviews = function(page_url) { 
+  
+  dynamite_html = read_html(page_url)
+  
+  review_titles = 
+    dynamite_html %>%
+    html_nodes("#cm_cr-review_list .review-title") %>%
+    html_text()
+  
+  review_stars = 
+    dynamite_html %>%
+    html_nodes("#cm_cr-review_list .review-rating") %>%
+    html_text()
+  
+  review_text = 
+    dynamite_html %>%
+    html_nodes(".review-text-content span") %>%
+    html_text()
+  
+  reviews = tibble(
+    title = review_titles,
+    stars = review_stars,
+    text = review_text
+  )
+  
+  reviews
+    
+} #can use option-click to put cursor across multiple lines/selection
+```
+
+Now i can read a lot of page reviews\! Although I’m back to
+copy-and-pasting code
+…
+
+``` r
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=1")
+```
+
+    ## # A tibble: 0 x 3
+    ## # … with 3 variables: title <chr>, stars <chr>, text <chr>
+
+``` r
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=2")
+```
+
+    ## # A tibble: 0 x 3
+    ## # … with 3 variables: title <chr>, stars <chr>, text <chr>
+
+``` r
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=3")
+```
+
+    ## # A tibble: 0 x 3
+    ## # … with 3 variables: title <chr>, stars <chr>, text <chr>
+
+``` r
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=4")
+```
+
+    ## # A tibble: 0 x 3
+    ## # … with 3 variables: title <chr>, stars <chr>, text <chr>
+
+## Function as argument
+
+``` r
+x = rnorm(25, 0, 1)
+
+my_summary = function(x, summ_func) {
+  summ_func(x)
+}
+
+my_summary(x, sd)
+```
+
+    ## [1] 0.9662027
+
+``` r
+my_summary(x, IQR)
+```
+
+    ## [1] 1.221061
+
+``` r
+my_summary(x, var)
+```
+
+    ## [1] 0.9335477
+
+## Scoping
+
+Mean example …
+
+``` r
+f = function(x) {
+  z = x + y
+  z
+}
+x = 1
+y = 2
+x = y
+x = 3
+y #setting x = y just sets value, not memory pointer
+```
+
+    ## [1] 2
+
+``` r
+f(x = y)
+```
+
+    ## [1] 4
+
+``` r
+f(x = 2) #uses local x from arg in addition to global y
+```
+
+    ## [1] 4

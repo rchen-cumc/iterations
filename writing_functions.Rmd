@@ -106,7 +106,7 @@ beta1_hat = coef(ls_fit)[2] # slope
 ```
 
 ```{r}
-sim_regression = function(n, beta0 = 2, beta1 = 3) {
+sim_regression = function(n, beta0 = 2, beta1 = 3) { #can set default values for args
   
   sim_data = tibble(
     x = rnorm(n, mean = 1, sd = 1),
@@ -122,8 +122,115 @@ sim_regression = function(n, beta0 = 2, beta1 = 3) {
 }
 
 sim_regression(n = 3000)
+sim_regression(3000, 2, 3) #don't need to specify args, can use positional matching
 sim_regression(n = 3000, beta0 = 17, beta1 = -3) #specifying beta0 intercept and beta1 slope
 sim_regression(n = 14, beta0 = 24)
 ```
 
 
+## Scrape lots of napoleon
+
+```{r}
+url = "https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=1"
+
+dynamite_html = read_html(url)
+
+review_titles = 
+  dynamite_html %>%
+  html_nodes("#cm_cr-review_list .review-title") %>%
+  html_text()
+
+review_stars = 
+  dynamite_html %>%
+  html_nodes("#cm_cr-review_list .review-rating") %>%
+  html_text()
+
+review_text = 
+  dynamite_html %>%
+  html_nodes(".review-text-content span") %>%
+  html_text()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+```
+
+
+Now as a function
+
+```{r}
+read_page_reviews = function(page_url) { 
+  
+  dynamite_html = read_html(page_url)
+  
+  review_titles = 
+    dynamite_html %>%
+    html_nodes("#cm_cr-review_list .review-title") %>%
+    html_text()
+  
+  review_stars = 
+    dynamite_html %>%
+    html_nodes("#cm_cr-review_list .review-rating") %>%
+    html_text()
+  
+  review_text = 
+    dynamite_html %>%
+    html_nodes(".review-text-content span") %>%
+    html_text()
+  
+  reviews = tibble(
+    title = review_titles,
+    stars = review_stars,
+    text = review_text
+  )
+  
+  reviews
+    
+} #can use option-click to put cursor across multiple lines/selection
+```
+
+Now i can read a lot of page reviews! Although I'm back to copy-and-pasting code ...
+
+```{r}
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=1")
+
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=2")
+
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=3")
+
+read_page_reviews("https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&reviewerType=avp_only_reviews&sortBy=recent&pageNumber=4")
+```
+
+## Function as argument
+```{r}
+x = rnorm(25, 0, 1)
+
+my_summary = function(x, summ_func) {
+  summ_func(x)
+}
+
+my_summary(x, sd)
+my_summary(x, IQR)
+my_summary(x, var)
+```
+
+
+## Scoping
+
+Mean example ...
+
+```{r}
+f = function(x) {
+  z = x + y
+  z
+}
+x = 1
+y = 2
+x = y
+x = 3
+y #setting x = y just sets value, not memory pointer
+f(x = y)
+f(x = 2) #uses local x from arg in addition to global y
+```
