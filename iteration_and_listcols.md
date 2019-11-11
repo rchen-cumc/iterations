@@ -473,3 +473,420 @@ output
     ##  8 "shut up tina you fat lard.\n …     5 "i LOVE napoleon.\n            "  
     ##  9 "Laughter is the Best Medicine…     5 "FAST SHIPPING! Love this Movie! …
     ## 10 "New condition\n            "       5 "Classic for the kids to watch.\n…
+
+## list columns / weather df
+
+``` r
+weather = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2016-01-01",
+    date_max = "2016-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY", 
+                      USC00519397 = "Waikiki_HA",
+                      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+    ## Registered S3 method overwritten by 'crul':
+    ##   method                 from
+    ##   as.character.form_file httr
+
+    ## Registered S3 method overwritten by 'hoardr':
+    ##   method           from
+    ##   print.cache_info httr
+
+    ## file path:          /Users/RayChen/Library/Caches/rnoaa/ghcnd/USW00094728.dly
+
+    ## file last updated:  2019-10-14 01:14:10
+
+    ## file min/max dates: 1869-01-01 / 2019-10-31
+
+    ## file path:          /Users/RayChen/Library/Caches/rnoaa/ghcnd/USC00519397.dly
+
+    ## file last updated:  2019-10-14 01:14:30
+
+    ## file min/max dates: 1965-01-01 / 2019-10-31
+
+    ## file path:          /Users/RayChen/Library/Caches/rnoaa/ghcnd/USS0023B17S.dly
+
+    ## file last updated:  2019-10-14 01:14:37
+
+    ## file min/max dates: 1999-09-01 / 2019-10-31
+
+nest within stations
+
+``` r
+weather_nest = 
+  weather %>% 
+  nest(data = date:tmin) #data has 3:prcp, tmin, tmax for each date (366 x 4)
+
+weather_nest
+```
+
+    ## # A tibble: 3 x 3
+    ##   name           id                    data
+    ##   <chr>          <chr>       <list<df[,4]>>
+    ## 1 CentralPark_NY USW00094728      [366 × 4]
+    ## 2 Waikiki_HA     USC00519397      [366 × 4]
+    ## 3 Waterhole_WA   USS0023B17S      [366 × 4]
+
+is the list column really a list??
+
+``` r
+weather_nest %>% pull(name)
+```
+
+    ## [1] "CentralPark_NY" "Waikiki_HA"     "Waterhole_WA"
+
+``` r
+weather_nest %>% pull(data)
+```
+
+    ## <list_of<
+    ##   tbl_df<
+    ##     date: date
+    ##     prcp: double
+    ##     tmax: double
+    ##     tmin: double
+    ##   >
+    ## >[3]>
+    ## [[1]]
+    ## # A tibble: 366 x 4
+    ##    date        prcp  tmax  tmin
+    ##    <date>     <dbl> <dbl> <dbl>
+    ##  1 2016-01-01     0   5.6   1.1
+    ##  2 2016-01-02     0   4.4   0  
+    ##  3 2016-01-03     0   7.2   1.7
+    ##  4 2016-01-04     0   2.2  -9.9
+    ##  5 2016-01-05     0  -1.6 -11.6
+    ##  6 2016-01-06     0   5    -3.8
+    ##  7 2016-01-07     0   7.8  -0.5
+    ##  8 2016-01-08     0   7.8  -0.5
+    ##  9 2016-01-09     0   8.3   4.4
+    ## 10 2016-01-10   457  15     4.4
+    ## # … with 356 more rows
+    ## 
+    ## [[2]]
+    ## # A tibble: 366 x 4
+    ##    date        prcp  tmax  tmin
+    ##    <date>     <dbl> <dbl> <dbl>
+    ##  1 2016-01-01     0  29.4  16.7
+    ##  2 2016-01-02     0  28.3  16.7
+    ##  3 2016-01-03     0  28.3  16.7
+    ##  4 2016-01-04     0  28.3  16.1
+    ##  5 2016-01-05     0  27.2  16.7
+    ##  6 2016-01-06     0  27.2  20  
+    ##  7 2016-01-07    46  27.8  18.3
+    ##  8 2016-01-08     3  28.3  17.8
+    ##  9 2016-01-09     8  27.8  19.4
+    ## 10 2016-01-10     3  28.3  18.3
+    ## # … with 356 more rows
+    ## 
+    ## [[3]]
+    ## # A tibble: 366 x 4
+    ##    date        prcp  tmax  tmin
+    ##    <date>     <dbl> <dbl> <dbl>
+    ##  1 2016-01-01     0   1.7  -5.9
+    ##  2 2016-01-02    25  -0.1  -6  
+    ##  3 2016-01-03     0  -5   -10  
+    ##  4 2016-01-04    25   0.3  -9.8
+    ##  5 2016-01-05    25   1.9  -1.8
+    ##  6 2016-01-06    25   1.4  -2.6
+    ##  7 2016-01-07     0   1.4  -3.9
+    ##  8 2016-01-08     0   1.1  -4  
+    ##  9 2016-01-09     0   1.4  -4.5
+    ## 10 2016-01-10     0   2.3  -3.8
+    ## # … with 356 more rows
+
+``` r
+weather_nest$data[[1]]
+```
+
+    ## # A tibble: 366 x 4
+    ##    date        prcp  tmax  tmin
+    ##    <date>     <dbl> <dbl> <dbl>
+    ##  1 2016-01-01     0   5.6   1.1
+    ##  2 2016-01-02     0   4.4   0  
+    ##  3 2016-01-03     0   7.2   1.7
+    ##  4 2016-01-04     0   2.2  -9.9
+    ##  5 2016-01-05     0  -1.6 -11.6
+    ##  6 2016-01-06     0   5    -3.8
+    ##  7 2016-01-07     0   7.8  -0.5
+    ##  8 2016-01-08     0   7.8  -0.5
+    ##  9 2016-01-09     0   8.3   4.4
+    ## 10 2016-01-10   457  15     4.4
+    ## # … with 356 more rows
+
+``` r
+weather_nest %>% 
+  unnest()
+```
+
+    ## # A tibble: 1,098 x 6
+    ##    name           id          date        prcp  tmax  tmin
+    ##    <chr>          <chr>       <date>     <dbl> <dbl> <dbl>
+    ##  1 CentralPark_NY USW00094728 2016-01-01     0   5.6   1.1
+    ##  2 CentralPark_NY USW00094728 2016-01-02     0   4.4   0  
+    ##  3 CentralPark_NY USW00094728 2016-01-03     0   7.2   1.7
+    ##  4 CentralPark_NY USW00094728 2016-01-04     0   2.2  -9.9
+    ##  5 CentralPark_NY USW00094728 2016-01-05     0  -1.6 -11.6
+    ##  6 CentralPark_NY USW00094728 2016-01-06     0   5    -3.8
+    ##  7 CentralPark_NY USW00094728 2016-01-07     0   7.8  -0.5
+    ##  8 CentralPark_NY USW00094728 2016-01-08     0   7.8  -0.5
+    ##  9 CentralPark_NY USW00094728 2016-01-09     0   8.3   4.4
+    ## 10 CentralPark_NY USW00094728 2016-01-10   457  15     4.4
+    ## # … with 1,088 more rows
+
+## Operations on list columns
+
+can I do useful things with a list column…?
+
+``` r
+central_park_df = weather_nest$data[[1]]
+
+lm(tmax ~ tmin, data = central_park_df)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = central_park_df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045
+
+``` r
+lm(tmax ~ tmin, data = weather_nest$data[[1]])
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[1]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045
+
+``` r
+lm(tmax ~ tmin, data = weather_nest$data[[2]])
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[2]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##      22.489        0.326
+
+``` r
+lm(tmax ~ tmin, data = weather_nest$data[[3]])
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[3]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       6.851        1.245
+
+try a loop…
+
+``` r
+output = vector("list", length = 3)
+
+for (i in 1:3) {
+  output[[i]] = lm(tmax ~ tmin, weather_nest$data[[i]])
+}
+
+output
+```
+
+    ## [[1]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[i]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045  
+    ## 
+    ## 
+    ## [[2]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[i]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##      22.489        0.326  
+    ## 
+    ## 
+    ## [[3]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = weather_nest$data[[i]])
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       6.851        1.245
+
+``` r
+weather_lm = function(df) {
+  lm(tmax ~ tmin, data = df)
+}
+```
+
+``` r
+for (i in 1:3) {
+  output[[i]] = weather_lm(weather_nest$data[[i]])
+}
+output
+```
+
+    ## [[1]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045  
+    ## 
+    ## 
+    ## [[2]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##      22.489        0.326  
+    ## 
+    ## 
+    ## [[3]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       6.851        1.245
+
+``` r
+output = map(weather_nest$data, weather_lm)
+output
+```
+
+    ## [[1]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       7.779        1.045  
+    ## 
+    ## 
+    ## [[2]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##      22.489        0.326  
+    ## 
+    ## 
+    ## [[3]]
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ tmin, data = df)
+    ## 
+    ## Coefficients:
+    ## (Intercept)         tmin  
+    ##       6.851        1.245
+
+``` r
+weather_nest %>% 
+  mutate(lin_models = map(data, weather_lm))
+```
+
+    ## # A tibble: 3 x 4
+    ##   name           id                    data lin_models
+    ##   <chr>          <chr>       <list<df[,4]>> <list>    
+    ## 1 CentralPark_NY USW00094728      [366 × 4] <lm>      
+    ## 2 Waikiki_HA     USC00519397      [366 × 4] <lm>      
+    ## 3 Waterhole_WA   USS0023B17S      [366 × 4] <lm>
+
+``` r
+weather_nest %>% 
+  mutate(lin_models = map(data, weather_lm)) %>% 
+  select(-data) %>% 
+  filter(name != "CentralPark_NY")
+```
+
+    ## # A tibble: 2 x 3
+    ##   name         id          lin_models
+    ##   <chr>        <chr>       <list>    
+    ## 1 Waikiki_HA   USC00519397 <lm>      
+    ## 2 Waterhole_WA USS0023B17S <lm>
+
+## Revisit Napoleon.. again
+
+``` r
+napoleon = 
+  tibble(
+    page = 1:5,
+    urls = str_c(url_base, page)
+  ) %>% 
+  mutate(
+    reviews = map(urls, read_page_reviews)
+  )
+napoleon
+```
+
+    ## # A tibble: 5 x 3
+    ##    page urls                                                  reviews      
+    ##   <int> <chr>                                                 <list>       
+    ## 1     1 https://www.amazon.com/product-reviews/B00005JNBQ/re… <tibble [10 …
+    ## 2     2 https://www.amazon.com/product-reviews/B00005JNBQ/re… <tibble [10 …
+    ## 3     3 https://www.amazon.com/product-reviews/B00005JNBQ/re… <tibble [10 …
+    ## 4     4 https://www.amazon.com/product-reviews/B00005JNBQ/re… <tibble [10 …
+    ## 5     5 https://www.amazon.com/product-reviews/B00005JNBQ/re… <tibble [10 …
+
+``` r
+napoleon = 
+  tibble(
+    page = 1:5,
+    urls = str_c(url_base, page)
+  ) %>% 
+  mutate(
+    reviews = map(urls, read_page_reviews)
+  ) %>% 
+  unnest(reviews) %>% 
+  select(-urls)
+
+napoleon
+```
+
+    ## # A tibble: 50 x 4
+    ##     page title                     stars text                              
+    ##    <int> <chr>                     <dbl> <chr>                             
+    ##  1     1 "Classic an funny!\n    …     5 "Classic movie and hilarious!!!\n…
+    ##  2     1 "I can watch this again …     5 "Great movie...classic\n         …
+    ##  3     1 "Great quality!\n       …     5 "Great quality.\n            "    
+    ##  4     1 "Good comedy\n          …     4 "Not as funny as I remember years…
+    ##  5     1 "Awesome\n            "       5 "Favorite movie of all time\n    …
+    ##  6     1 "yes\n            "           5 "good\n            "              
+    ##  7     1 "Gotta watch it!\n      …     5 "Super fun cult film. A must-see!…
+    ##  8     1 "Great movie\n          …     5 "Love this movie.\n            "  
+    ##  9     1 "Duh\n            "           5 "Best movie ever\n            "   
+    ## 10     1 "Great video\n          …     5 "Product as described.  Great tra…
+    ## # … with 40 more rows
